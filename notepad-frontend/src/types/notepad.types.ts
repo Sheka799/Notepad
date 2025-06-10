@@ -5,3 +5,5 @@ export interface INotepadResponse {
     name: string
     description?: string
 }
+
+export type TypeNotepadFormState = Partial<Omit<INotepadResponse, 'id' | 'updatedAt'>>
