@@ -2,11 +2,15 @@ import { IUser, TypeUserForm } from '@/types/auth.types'
 
 import { axiosWithAuth } from '@/api/interceptors'
 
+export interface IProfileResponse {
+	user: IUser
+}
+
 class UserService {
-	private BASE_URL = '/user/profile'
+	private BASE_URL = '/user'
 
 	async getProfile() {
-		const response = await axiosWithAuth.get<IUser>(this.BASE_URL)
+		const response = await axiosWithAuth.get<IProfileResponse>(this.BASE_URL)
 		return response.data
 	}
 
