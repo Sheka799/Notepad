@@ -9,7 +9,7 @@ export function Profile() {
     const {data, isLoading} = useProfile()
 
     return (
-        <div className='absolute right-4'>
+        <div className=''>
 			{isLoading ? (
 				<Loader />
 			) : (
