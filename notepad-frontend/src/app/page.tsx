@@ -1,5 +1,12 @@
-export default function Home() {
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Блокнот',
+  description: 'Приложения для создания блокнотов'
+}
+
+export default function HomePage() {
   return (
-    <h1 className="text-white">Notepad</h1>
-  );
+    <h1>Notepads</h1>
+  )
 }

@@ -1,23 +1,31 @@
 'use client'
 
+import RichTextEditor from "@/components/rich-text-editor"
 import { Button } from "@/components/ui/buttons/Button"
 import { Field } from "@/components/ui/fields/Field"
 import { DASHBOARD_PAGES } from "@/config/pages-url.config"
 import { useCreateNotepad } from "@/hooks/useCreateNotepad"
 import { TypeNotepadFormState } from "@/types/notepad.types"
 import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 
 export function Create() {
+  const [content, setContent] = useState<string>("");
+
     const {push} = useRouter()
 
     const {createNotepad} = useCreateNotepad()
 
-    const {register, handleSubmit, reset} = useForm<TypeNotepadFormState>({
-        mode: 'onSubmit'
+    const {register, handleSubmit, reset, setValue} = useForm<TypeNotepadFormState>({
+        mode: 'onSubmit',
     })
 
-    const onSubmit: SubmitHandler<TypeNotepadFormState> = data => {
+    useEffect(() => {
+        setValue("description", content)
+    },[content])
+
+    const onSubmit: SubmitHandler<TypeNotepadFormState> = (data) => {
         createNotepad(data)
         reset()
         push(DASHBOARD_PAGES.NOTEPADS)
@@ -37,14 +45,12 @@ export function Create() {
                     type="name"
                 />
 
-                <Field 
-                    {...register('description')}
-                    id="description"
-                    label="Текст"
-                    placeholder="Введите текст"
-                    extra="mb-6"
-                    type="text"
-                />
+                <div className="mb-4">
+                    <label htmlFor="content" className="text-sm dark:text-white ml-1.5 font-medium">Описание</label>
+                    <RichTextEditor content={content} onChange={setContent} />
+                </div>
+
+                <input type="hidden" {...register('description')} />
 
                 <div className="flex gap-4 justify-center">
                     <Button>Создать</Button>

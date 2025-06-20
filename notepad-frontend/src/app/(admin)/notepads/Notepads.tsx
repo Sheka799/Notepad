@@ -25,10 +25,10 @@ export function Notepads() {
                     <div key={notepad.id} className="flex items-start justify-between gap-4 border p-3 rounded-md">
                         <article key={notepad.id} className="flex max-w-xl flex-col items-start justify-between">
                             <div className="flex items-center gap-x-4 text-xs">
-                                <time dateTime={notepad.createdAt} className="text-slate-300">{dayjs(`${notepad.createdAt}`).format('DD.MM.YYYY')}</time>
+                                <time dateTime={notepad.createdAt} className="">{dayjs(`${notepad.createdAt}`).format('DD.MM.YYYY')}</time>
                             </div>
                             <div className="group relative mb-3">
-                                <h3 className="mt-3 text-lg/6 font-semibold text-white group-hover:text-slate-200">{notepad.name}</h3>
+                                <h3 className="mt-3 text-lg/6 font-semibold">{notepad.name}</h3>
                             </div>
                             <Button onClick={() => deleteNotepad(notepad.id)}>Удалить</Button>
                         </article>

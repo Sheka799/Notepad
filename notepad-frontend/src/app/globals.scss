@@ -7,7 +7,7 @@
   --foreground: #171717;
 }
 
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
@@ -19,6 +19,7 @@ body {
 	font-family: var(--font-zen), sans-serif;
 	color: var(--foreground);
 	background-color: var(--background);
+	min-height: 100vh;
 
 	@media (max-width: 1200px) {
 		font-size: 16px;
@@ -55,6 +56,20 @@ input.defaultCheckbox::before path {
 
 input:checked.defaultCheckbox::before {
 	opacity: 1;
+}
+
+.tiptap {
+	@apply mt-2 w-full rounded-lg border bg-white/0 p-3 text-base outline-none placeholder:text-white/30 placeholder:font-normal duration-500 transition-colors focus:border-primary;
+}
+
+.tiptap h1 {
+  @apply text-2xl;
+}
+.tiptap h2 {
+  @apply text-xl;
+}
+.tiptap h3 {
+  @apply text-lg;
 }
 
 .slide {
