@@ -31,6 +31,12 @@ export function Edit({id}: IId) {
 
     useEffect(() => {
         if (isSuccess) {
+            setContent(data?.data.description) 
+        }                
+    }, [isSuccess])
+
+    useEffect(() => {
+        if (isSuccess) {
             setValue("description", content)  
         }                
     }, [content])
