@@ -31,6 +31,7 @@ export function Notepads() {
                                 <h3 className="mt-3 text-lg/6 font-semibold">{notepad.name}</h3>
                             </div>
                             <Button onClick={() => deleteNotepad(notepad.id)}>Удалить</Button>
+                            <Link href={`/notepad/${notepad.id}`}><Button>Просмотр</Button></Link>
                         </article>
                     </div>
                 )}

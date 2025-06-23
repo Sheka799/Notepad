@@ -12,13 +12,14 @@ interface RichTextEditorProps {
   onChange?: (content: string) => void;
   editable?: boolean;
 }
+
 export default function RichTextEditor({
   content,
   onChange,
   editable,
 }: RichTextEditorProps) {
   const isEditable = editable ?? true;
-
+  
   const editor = useEditor({
     editable: isEditable,
     extensions: [

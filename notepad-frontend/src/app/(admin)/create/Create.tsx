@@ -11,7 +11,7 @@ import { useEffect, useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 
 export function Create() {
-  const [content, setContent] = useState<string>("");
+    const [content, setContent] = useState<string>("");
 
     const {push} = useRouter()
 

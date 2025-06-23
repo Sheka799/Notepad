@@ -14,6 +14,15 @@ export class NotepadService {
     })
   }
 
+  async findOne(notepadId: string, userId: string) {
+    return this.prisma.notepad.findUnique({
+      where: {
+        userId,
+        id: notepadId
+      }
+    })
+  }
+
   async create(dto: NotepadDto, userId: string) {
     return this.prisma.notepad.create({
       data: {

@@ -3,9 +3,9 @@
 import { TypeUserForm } from "@/types/auth.types"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useInitialData } from "./useInitialData"
-import { useUpdateSettings } from "./useUpdateSettings"
 import { Field } from "@/components/ui/fields/Field"
 import { Button } from "@/components/ui/buttons/Button"
+import { useUpdateSettings } from "@/hooks/useUpdateSettings"
 
 export function Settings() {
     const {register, handleSubmit, reset} = useForm<TypeUserForm>({
@@ -26,7 +26,7 @@ export function Settings() {
     }
 
     return (
-        <div>
+        <div className="p-4">
 			<form
 				className='w-2/4'
 				onSubmit={handleSubmit(onSubmit)}

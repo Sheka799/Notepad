@@ -14,6 +14,12 @@ export class NotepadController {
     return this.notepadService.findAll(userId);
   }
 
+  @Get(':id')
+  @Auth()
+  async findOne(@CurrentUser('id') userId: string, @Param('id') id: string) {
+    return this.notepadService.findOne(id, userId);
+  }
+
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Post()

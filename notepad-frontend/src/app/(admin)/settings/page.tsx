@@ -11,9 +11,9 @@ export const metadata: Metadata = {
 
 export default function Page() {
     return (
-        <div>
+        <>
             <Heading title='Настройки профиля' />
             <Settings />
-        </div>
+        </>
     )
 }

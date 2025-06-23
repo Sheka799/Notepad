@@ -9,6 +9,11 @@ class NotepadService {
         return response
     }
 
+    async getNotepad(id: string) {
+        const response = await axiosWithAuth.get(`${this.BASE_URL}/${id}`)
+        return response
+    }
+
     async createNotepad(data: TypeNotepadFormState) {
         const response = await axiosWithAuth.post(this.BASE_URL, data)
         return response

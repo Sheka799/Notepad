@@ -37,7 +37,7 @@ export function Auth() {
 
     return (
         <div className="flex min-h-screen">
-            <form className="w-1/4 m-auto shadow bg-sidebar rounded-xl p-layout p-4" onSubmit={handleSubmit(onSubmit)}>
+            <form className="w-1/4 m-auto shadow rounded-xl p-layout p-4" onSubmit={handleSubmit(onSubmit)}>
                 <Heading title="Авторизация" />
 
                 <Field 
