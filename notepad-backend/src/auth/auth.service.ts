@@ -29,7 +29,7 @@ export class AuthService {
   async register(dto: AuthDto) {
     const oldUser = await this.userService.getByEmail(dto.email)
 
-    if (oldUser) throw new BadRequestException('User already exists')
+    if (oldUser) throw new BadRequestException('Пользователь уже существует')
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {password, ...user} = await this.userService.create(dto)
@@ -44,7 +44,7 @@ export class AuthService {
 
   async getNewTokens(refreshToken: string) {
     const result = await this.jwt.verifyAsync(refreshToken)
-    if (!result) throw new UnauthorizedException('Invalid refresh token')
+    if (!result) throw new UnauthorizedException('Недопустимый токен обновления')
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {password, ...user} = await this.userService.getById(result.id)
@@ -74,11 +74,11 @@ export class AuthService {
   private async validateUser(dto:AuthDto) {
     const user = await this.userService.getByEmail(dto.email)
 
-    if (!user) throw new NotAcceptableException('User not found')
+    if (!user) throw new NotAcceptableException('Пользователь не найден')
 
     const isValid = await verify(user.password, dto.password)
 
-    if(!isValid) throw new UnauthorizedException('Invalid password')
+    if(!isValid) throw new UnauthorizedException('Неверный пароль')
     
     return user
   }

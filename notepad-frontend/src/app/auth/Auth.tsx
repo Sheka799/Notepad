@@ -7,13 +7,14 @@ import { DASHBOARD_PAGES } from "@/config/pages-url.config"
 import { authService } from "@/services/auth.service"
 import { IAuthForm } from "@/types/auth.types"
 import { useMutation } from "@tanstack/react-query"
+import { AxiosError } from "axios"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 export function Auth() {
-    const {register, handleSubmit, reset} = useForm<IAuthForm>({
+    const {register, handleSubmit, reset, formState: {errors}} = useForm<IAuthForm>({
         mode: 'onChange'
     })
 
@@ -28,6 +29,13 @@ export function Auth() {
             toast.success('Успешный вход в систему!')
             reset()
             push(DASHBOARD_PAGES.NOTEPADS)
+        },
+        onError(error: unknown) {
+            if (error instanceof AxiosError) {
+                toast.error(error?.response?.data?.message)                  
+            } else {
+                console.log(error);                  
+            }
         }
     })
 
@@ -37,12 +45,17 @@ export function Auth() {
 
     return (
         <div className="flex min-h-screen">
-            <form className="w-1/4 m-auto shadow rounded-xl p-layout p-4" onSubmit={handleSubmit(onSubmit)}>
-                <Heading title="Авторизация" />
+            <form className="min-w-72 max-w-screen-md m-auto shadow rounded-xl p-layout p-4" onSubmit={handleSubmit(onSubmit)}>
+                <Heading title="Авторизация" />                
 
+                {errors.email?.message && <span className="text-xs text-red-600">{errors.email?.message}</span>}
                 <Field 
                     {...register('email', {
-                        required: 'Неверный email'
+                        required: 'Введите email',
+                        pattern: {
+                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, 
+                            message: "Введите валидный email"
+                        }
                     })}
                     id="email"
                     label="Email"
@@ -51,9 +64,14 @@ export function Auth() {
                     type="email"
                 />
 
+                {errors.password?.message && <span className="text-xs text-red-600">{errors.password?.message}</span>}
                 <Field 
                     {...register('password', {
-                        required: 'Неверный пароль'
+                        required: 'Введите пароль',
+                        minLength: {
+                            value: 6,
+                            message: "Пароль должен состоять минимум из 6 символов",
+                        },
                     })}
                     id="password"
                     label="Пароль"
