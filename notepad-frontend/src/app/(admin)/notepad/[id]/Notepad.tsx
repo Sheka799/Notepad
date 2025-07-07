@@ -19,8 +19,8 @@ export function Notepad({id}: IId) {
                 <Loader /> : 
                 <div className="p-4">
                     <Link href={`/edit/${id}`}><Button>Редактировать</Button></Link>
-                    <h1 className="text-center text-5xl mb-5">{data?.data.name}</h1>
-                    <div><RichTextEditor content={data?.data.description || ""} editable={false} /></div>
+                    <h1 className="text-center text-5xl mb-5">{data?.name}</h1>
+                    <div><RichTextEditor content={data?.description || ""} editable={false} /></div>
                 </div>
             }
         </>

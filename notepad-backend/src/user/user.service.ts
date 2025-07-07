@@ -3,6 +3,8 @@ import { hash } from 'argon2';
 import { AuthDto } from 'src/auth/dto/auth.dto';
 import { PrismaService } from 'src/prisma.servive';
 import { UserDto } from './dto/user.dto';
+import * as path from 'path';
+import * as fs from 'fs';
 
 @Injectable()
 export class UserService {
@@ -65,6 +67,38 @@ export class UserService {
       select: {
         name: true,
         email: true
+      }
+    })
+  }
+
+  async uploadAvatar(id: string, file: Express.Multer.File) {    
+    const uploadDir = path.join(__dirname, '..', '..', 'uploads')
+
+    const filePath = path.join(uploadDir, file.originalname)
+
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, {recursive: true})
+    }
+
+    fs.writeFileSync(filePath, file.buffer)
+
+    return this.prisma.user.update({
+      where: {
+        id
+      },
+      data: {
+        avatar: file.originalname
+      }
+    })
+  }
+
+  async deleteAvatar(id: string) {
+    return this.prisma.user.update({
+      where: {
+        id
+      },
+      data: {
+        avatar: null
       }
     })
   }

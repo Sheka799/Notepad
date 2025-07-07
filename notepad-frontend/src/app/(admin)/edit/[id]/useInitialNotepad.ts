@@ -9,8 +9,8 @@ export function useInitialNotepad(reset: UseFormReset<INotepadResponse>, id: str
     useEffect(() => {
         if (isSuccess && data) {
             reset({
-                name: data.data.name,
-                description: data.data.description
+                name: data.name,
+                description: data.description
             })
         }
     }, [isSuccess])

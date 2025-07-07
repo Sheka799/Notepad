@@ -31,7 +31,7 @@ export function Edit({id}: IId) {
 
     useEffect(() => {
         if (isSuccess) {
-            setContent(data?.data.description) 
+            setContent(data?.description) 
         }                
     }, [isSuccess])
 
@@ -63,7 +63,7 @@ export function Edit({id}: IId) {
                 />
                 <div>
                     <label htmlFor="content" className="text-sm dark:text-white ml-1.5 font-medium">Описание</label>
-                    <RichTextEditor content={data?.data.description || content} onChange={setContent} />
+                    <RichTextEditor content={data?.description || content} onChange={setContent} />
                 </div>
 
                 <input type="hidden" {...register('description')} />

@@ -22,10 +22,10 @@ export function Notepads() {
             </div>
             {isLoading ? 
             <Loader /> 
-            : data?.data.length ? 
+            : data?.length ? 
             <>
                 <div className="mx-auto grid grid-cols-1 gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none md:grid-cols-3 lg:grid-cols-5">
-                    {data?.data.map((notepad: INotepadResponse) => 
+                    {data?.map((notepad: INotepadResponse) => 
                         <div key={notepad.id} className="flex items-start justify-between gap-4 border p-3 rounded-md">
                             <article key={notepad.id} className="flex max-w-xl flex-col items-start justify-between">
                                 <div className="flex items-center gap-x-4 text-xs">
