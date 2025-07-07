@@ -9,11 +9,11 @@ export function useDeleteAvatar() {
         mutationKey: ['delete avatar'],
         mutationFn: () => userService.deleteAvatar(),
         onSuccess() {
-            toast.success('Аватар удален')
+            toast.success('Изображение профиля удалено')
             queryClient.invalidateQueries({queryKey: ['profile']})
         },
         onError(e) {
-            toast.error('Не удалось удалить аватар')
+            toast.error('Не удалось удалить изображение профиля')
             console.log(e);            
         }
     })

@@ -30,8 +30,7 @@ export class UserController {
   async uploadFile(@CurrentUser('id') id: string, @UploadedFile(new ParseFilePipe({
     validators: [
       new FileTypeValidator({
-        fileType: /\/(jpg|jpeg|png|webp)$/,
-        
+        fileType: /\/(jpg|jpeg|png|webp)$/
       }),
       new MaxFileSizeValidator({
         maxSize: 1000 * 1000 * 5,

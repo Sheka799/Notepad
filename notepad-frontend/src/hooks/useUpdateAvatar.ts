@@ -10,7 +10,7 @@ export function useUpdateAvatar() {
         mutationKey: ['upload avatar'],
         mutationFn: (formData: FormData) => userService.uploadAvatar(formData),
         onSuccess() {
-            toast.success('Аватар изменен')
+            toast.success('Изображение профиля изменено')
             queryClient.invalidateQueries({queryKey: ['profile']})
         },
         onError(error: unknown) {
