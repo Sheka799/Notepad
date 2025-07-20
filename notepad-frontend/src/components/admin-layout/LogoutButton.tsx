@@ -1,22 +1,18 @@
 'use client'
 
-import { authService } from "@/services/auth.service"
-import { useMutation } from "@tanstack/react-query"
 import { LogOut } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { LogoutModal } from "../ui/modal/LogoutModal"
+import { useState } from "react"
 
 export function LogoutButton() {
-    const router = useRouter()
-
-    const {mutate} = useMutation({
-        mutationKey: ['logout'],
-        mutationFn: () => authService.logout(),
-        onSuccess: () => router.push('/auth')
-    })
+    const [open, setOpen] = useState<boolean>(false)
 
     return (
-        <div className='flex items-center opacity-40 hover:opacity-100 transition-opacity duration-300'>
-            <button onClick={() => mutate()}><LogOut size={20} /></button>
-        </div>
+        <>
+            <div className='flex items-center opacity-40 hover:opacity-100 transition-opacity duration-300'>
+                <button onClick={() => {setOpen(true)}}><LogOut size={20} /></button>
+            </div>
+            <LogoutModal open={open} setOpen={setOpen} />
+        </>
     )
 }

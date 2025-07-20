@@ -81,7 +81,7 @@ export function Settings() {
 													<span>Обновить изображение профиля</span>
 													<input id="file-upload" disabled={isPendingAvatar} name="avatar" onChange={onSubmitAvatar} type="file" className="sr-only" />
 												</label>
-												<Trash onClick={() => setOpen(true)} className="cursor-pointer opacity-40 hover:opacity-100 transition-opacity duration-300" size={20} />
+												{data?.user.avatar ? <Trash onClick={() => setOpen(true)} className="cursor-pointer opacity-40 hover:opacity-100 transition-opacity duration-300" size={20} /> : ''}
 											</div>
 											<p className="text-xs text-gray-400">PNG, JPG, GIF, JPEG, WEBP не более 5MB</p>
 										</div>
