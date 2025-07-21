@@ -28,5 +28,5 @@ export async function middleware(
 }
 
 export const config = {
-    matcher: ['/notepads/:path*', '/auth/:path*', '/create/:path*']
+    matcher: ['/notepads/:path*', '/notepad/:path*', '/edit/:path*', '/settings', '/auth/:path*', '/create']
 }

@@ -43,7 +43,6 @@ export function Edit({id}: IId) {
 
     const onSubmit: SubmitHandler<INotepadResponse> = data => {
         updateNotepad({id, data})
-        reset()
         push(`/notepad/${id}`)
     }
 

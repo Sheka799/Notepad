@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 		default: SITE_NAME,
 		template: `%s | ${SITE_NAME}`
 	},
-	description: ''
+	description: 'Простое и удобное приложение для работы с текстовыми файлами. Он позволяет создавать, редактировать и сохранять заметки, код или другие текстовые данные без сложного форматирования'
 };
 
 export default function RootLayout({

@@ -9,7 +9,7 @@ export function Profile() {
     const {data, isLoading} = useProfile()
 
     return (
-        <div className=''>
+        <div className='ml-auto sm:ml-0'>
 			{isLoading ? (
 				<Loader />
 			) : (

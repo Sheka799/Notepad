@@ -11,11 +11,11 @@ interface IModal {
 }
 
 export function LogoutModal({open, setOpen}: IModal) {
-    const router = useRouter()
+    const {push} = useRouter()
     const {mutate} = useMutation({
         mutationKey: ['logout'],
         mutationFn: () => authService.logout(),
-        onSuccess: () => router.push('/auth')
+        onSuccess: () => push('/')
     })
     
     return (
