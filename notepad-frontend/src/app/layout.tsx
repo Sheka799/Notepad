@@ -18,7 +18,19 @@ export const metadata: Metadata = {
 		default: SITE_NAME,
 		template: `%s | ${SITE_NAME}`
 	},
-	description: 'Простое и удобное приложение для работы с текстовыми файлами. Он позволяет создавать, редактировать и сохранять заметки, код или другие текстовые данные без сложного форматирования'
+	description: 'Простое и удобное приложение для работы с текстовыми файлами. Он позволяет создавать, редактировать и сохранять заметки, код или другие текстовые данные без сложного форматирования',
+	icons: {
+		icon: [
+		{ url: '/favicon/favicon.ico', sizes: 'any' },
+		{ url: '/favicon/icon.png', type: 'image/png', sizes: '32x32' },
+		{ url: '/favicon/icon.svg', type: 'image/svg+xml' },
+		{ url: '/favicon/web-app-manifest-192x192', type: 'image/png', sizes: '192x192' },
+		{ url: '/favicon/web-app-manifest-512x512', type: 'image/png', sizes: '512x512' },
+		],
+		apple: [
+		{ url: '/favicon/apple-icon.png', type: 'image/png', sizes: '180x180' },
+		],
+  	},
 };
 
 export default function RootLayout({
