@@ -19,8 +19,8 @@ export function Profile() {
 						<p className='text-sm opacity-40'>{data?.user.email}</p>
 					</div>
 
-					<div className='w-12 h-12 flex justify-center items-center text-2xl rounded-full uppercase bg-gray-200'>
-						{data?.user.avatar ? <img src={`http://localhost:3001/static/${data?.user.avatar}`} width={48} height={48} className="w-12 h-12 rounded-full" alt="avatar" /> : data?.user.name?.charAt(0) || 'A'}
+					<div className='w-12 h-12 flex justify-center items-center text-2xl rounded-full uppercase bg-gray-200 dark:bg-gray-800'>
+						{data?.user.avatarUrl ? <img src={`${data?.user.avatarUrl}`} width={48} height={48} className="w-12 h-12 rounded-full" alt="avatar" /> : data?.user.name?.charAt(0) || 'A'}
 					</div>
 
 					<div className="flex flex-col gap-1 ml-3">

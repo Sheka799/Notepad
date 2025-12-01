@@ -8,6 +8,7 @@ export interface IUser {
     name?: string
     email: string
     avatar?: string
+    avatarUrl?: string
 }
 
 export interface IAuthResponse { 

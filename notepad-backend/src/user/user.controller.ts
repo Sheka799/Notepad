@@ -27,7 +27,7 @@ export class UserController {
   @UseInterceptors(FileInterceptor('avatar'))
   @Auth()
   @Post()
-  async uploadFile(@CurrentUser('id') id: string, @UploadedFile(new ParseFilePipe({
+  async uploadFile(@CurrentUser() user, @UploadedFile(new ParseFilePipe({
     validators: [
       new FileTypeValidator({
         fileType: /\/(jpg|jpeg|png|webp)$/
@@ -38,13 +38,13 @@ export class UserController {
       })
     ]
   })) file: Express.Multer.File) {
-    return this.userService.uploadAvatar(id, file)
+    return this.userService.uploadAvatar(user, file)
   }
 
   @HttpCode(200)
   @Put('delete')
   @Auth()
-  async deleteFile(@CurrentUser('id') id: string) {
-    return this.userService.deleteAvatar(id);
+  async deleteFile(@CurrentUser() user) {
+    return this.userService.deleteAvatar(user);
   }
 }
