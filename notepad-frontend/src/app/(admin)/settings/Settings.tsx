@@ -66,11 +66,11 @@ export function Settings() {
 					<>
 						<form className='w-full max-w-md mb-4'>
 							<div className="col-span-full">
-								<label htmlFor="cover-photo" className="block text-sm/6 font-medium text-gray-900">Изображение профиля</label>
+								<label htmlFor="cover-photo" className="block text-sm/6 font-medium text-gray-900 dark:text-white">Изображение профиля</label>
 								<div className="mt-2">
 									<div className="flex items-center gap-4">
-										<div className='w-16 h-16 flex justify-center items-center text-2xl rounded-full uppercase bg-gray-200'>
-										{data?.user.avatar ? <img src={`http://localhost:3001/static/${data?.user.avatar}`} width={64} height={64} className="w-16 h-16 rounded-full" alt="avatar" /> : data?.user.name?.charAt(0) || 'A'}
+										<div className='w-16 h-16 flex justify-center items-center text-2xl rounded-full uppercase bg-gray-200 dark:bg-gray-800'>
+										{data?.user.avatarUrl ? <img src={`${data?.user.avatarUrl}`} width={64} height={64} className="w-16 h-16 rounded-full" alt="avatar" /> : data?.user.name?.charAt(0) || 'A'}
 										</div>
 										<div className="flex flex-col gap-2">
 											<div className="flex items-center gap-3">
@@ -81,9 +81,9 @@ export function Settings() {
 													<span>Обновить изображение профиля</span>
 													<input id="file-upload" disabled={isPendingAvatar} name="avatar" onChange={onSubmitAvatar} type="file" className="sr-only" />
 												</label>
-												{data?.user.avatar ? <Trash onClick={() => setOpen(true)} className="cursor-pointer opacity-40 hover:opacity-100 transition-opacity duration-300" size={20} /> : ''}
+												{data?.user.avatarUrl ? <Trash onClick={() => setOpen(true)} className="cursor-pointer opacity-40 hover:opacity-100 transition-opacity duration-300" size={20} /> : ''}
 											</div>
-											<p className="text-xs text-gray-400">PNG, JPG, GIF, JPEG, WEBP не более 5MB</p>
+											<p className="text-xs text-gray-400">PNG, JPG, JPEG, WEBP не более 5MB</p>
 										</div>
 									</div>
 								</div>
