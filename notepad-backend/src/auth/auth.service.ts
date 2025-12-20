@@ -4,16 +4,23 @@ import { UserService } from 'src/user/user.service';
 import { AuthDto } from './dto/auth.dto';
 import { verify } from 'argon2';
 import { Response } from 'express';
+import { isDev } from 'src/utils/is-dev.utils';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   EXPIRE_DAY_REFRESH_TOKEN = 1
   REFRESH_TOKEN_NAME = 'refreshToken' 
 
+  private readonly COOKIE_DOMAIN: string
+
   constructor(
     private jwt: JwtService,
+		private readonly configService: ConfigService,
     private userService: UserService
-  ) {}
+  ) {
+    this.COOKIE_DOMAIN = configService.getOrThrow<string>('COOKIE_DOMAIN')
+  }
 
   async login(dto: AuthDto) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -31,7 +38,6 @@ export class AuthService {
 
     if (oldUser) throw new BadRequestException('Пользователь уже существует')
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {password, ...user} = await this.userService.create(dto)
 
     const tokens = this.issueTokens(user.id)
@@ -46,7 +52,6 @@ export class AuthService {
     const result = await this.jwt.verifyAsync(refreshToken)
     if (!result) throw new UnauthorizedException('Недопустимый токен обновления')
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {password, ...user} = await this.userService.getById(result.id)
 
     const tokens = this.issueTokens(user.id)
@@ -74,11 +79,11 @@ export class AuthService {
   private async validateUser(dto:AuthDto) {
     const user = await this.userService.getByEmail(dto.email)
 
-    if (!user) throw new NotAcceptableException('Пользователь не найден')
+    if (!user) throw new NotAcceptableException('Неверный email или пароль')
 
     const isValid = await verify(user.password, dto.password)
 
-    if(!isValid) throw new UnauthorizedException('Неверный пароль')
+    if(!isValid) throw new UnauthorizedException('Неверный email или пароль')
     
     return user
   }
@@ -89,22 +94,20 @@ export class AuthService {
 
     res.cookie(this.REFRESH_TOKEN_NAME, refreshToken, {
       httpOnly: true,
-      domain: 'localhost',
+      domain: this.COOKIE_DOMAIN,
       expires: expiresIn,
-      secure: true,
-      // lax if production
-      sameSite: 'none'
+      secure: !isDev(this.configService),
+      sameSite: 'lax'
     })
   }
 
   removeRefreshTokenFromResponse(res: Response) {
     res.cookie(this.REFRESH_TOKEN_NAME, '', {
       httpOnly: true,
-      domain: 'localhost',
+      domain: this.COOKIE_DOMAIN,
       expires: new Date(0),
-      secure: true,
-      // lax if production
-      sameSite: 'none'
+      secure: !isDev(this.configService),
+      sameSite: 'lax'
     })
   } 
 }

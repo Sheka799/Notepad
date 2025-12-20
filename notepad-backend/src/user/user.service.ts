@@ -7,13 +7,19 @@ import * as sharp from 'sharp'
 import * as fs from 'fs'
 import { User } from '@prisma/client'
 import { StorageService } from '../storage/storage.service'
+import { ConfigService } from '@nestjs/config'
 
 @Injectable()
 export class UserService {
+	private readonly S3_URL: string
+
 	constructor(
 		private readonly prismaService: PrismaService,
+		private readonly configService: ConfigService,
 		private readonly storageService: StorageService
-	) {}
+	) {
+    	this.S3_URL = configService.getOrThrow<string>('S3_URL');
+  	}
 
 	async getById(id: string) {
 		return this.prismaService.user.findUnique({
@@ -37,7 +43,6 @@ export class UserService {
 	async getProfile(id: string) {
 		const profile = await this.getById(id)
 
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { password, ...rest } = profile
 
 		return {
@@ -107,7 +112,7 @@ export class UserService {
 			},
 			data: {
 				avatar: fileName,
-				avatarUrl: `https://b01790f5-6d45-4ffc-a5ba-8dae1d937b88.selstorage.ru/${fileName}`
+				avatarUrl: `${this.S3_URL}/${fileName}`
 			}
 		})
 

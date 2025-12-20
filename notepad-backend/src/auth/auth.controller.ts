@@ -37,7 +37,7 @@ export class AuthController {
 
     if (!refreshTokenFromCookies) {
       this.authService.removeRefreshTokenFromResponse(res)
-      throw new UnauthorizedException('Refresh token not passed')
+      throw new UnauthorizedException('Токен обновления не передан. Необходимо войти в систему заново')
     }
 
     const { refreshToken, ...response } = await this.authService.getNewTokens(refreshTokenFromCookies)
