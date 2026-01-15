@@ -67,7 +67,8 @@ export function Settings() {
 						<form className='w-full max-w-md mb-4'>
 							<div className="col-span-full">
 								<label htmlFor="cover-photo" className="block text-sm/6 font-medium text-gray-900 dark:text-white">Изображение профиля</label>
-								<div className="mt-2">
+								{isPendingAvatar ? (<Loader />) : (
+									<div className="mt-2">
 									<div className="flex items-center gap-4">
 										<div className='w-16 h-16 flex justify-center items-center text-2xl rounded-full uppercase bg-gray-200 dark:bg-gray-800'>
 										{data?.user.avatarUrl ? <img src={`${data?.user.avatarUrl}`} width={64} height={64} className="w-16 h-16 rounded-full" alt="avatar" /> : data?.user.name?.charAt(0) || 'A'}
@@ -87,6 +88,7 @@ export function Settings() {
 										</div>
 									</div>
 								</div>
+								)}
 							</div>
 						</form>
 						<form

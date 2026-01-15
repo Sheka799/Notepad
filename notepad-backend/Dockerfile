@@ -1,11 +1,13 @@
-FROM node:20-alpine AS base
+FROM node:22.17.1-alpine AS base
 
-RUN apk add --no-cache libc6-compat
+# RUN apk add --no-cache libc6-compat
 
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install --legacy-peer-deps
+RUN npm cache clean --force && \
+    npm install -g npm@latest && \
+    npm install --legacy-peer-deps
 
 FROM base AS build
 
@@ -18,9 +20,9 @@ RUN npx prisma generate
 COPY . .
 RUN npm run build
 
-FROM node:20-alpine AS production
+FROM node:22.17.1-alpine AS production
 
-RUN apk add --no-cache libc6-compat
+# RUN apk add --no-cache libc6-compat
 
 WORKDIR /app
 
@@ -30,7 +32,8 @@ ENV NODE_ENV=production
 COPY --from=build /app/package*.json ./
 
 # 2. Устанавливаем ТОЛЬКО production зависимости
-RUN npm ci --only=production --frozen-lockfile
+COPY --from=build /app/node_modules ./node_modules
+# RUN npm ci --only=production
 
 # 3. Копируем собранное приложение
 COPY --from=build /app/dist ./dist
@@ -41,5 +44,7 @@ COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
 
 # 5. Копируем Prisma схему (для миграций или будущих генераций)
 COPY --from=build /app/prisma ./prisma
+
+EXPOSE 3001
 
 CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main"]

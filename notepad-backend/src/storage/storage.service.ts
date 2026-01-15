@@ -1,8 +1,8 @@
 import {
 	DeleteObjectCommand,
-	DeleteObjectCommandInput,
+	type DeleteObjectCommandInput,
 	PutObjectCommand,
-	PutObjectCommandInput,
+	type PutObjectCommandInput,
 	S3Client
 } from '@aws-sdk/client-s3'
 import { Injectable } from '@nestjs/common'
@@ -22,7 +22,9 @@ export class StorageService {
 				secretAccessKey: this.configService.getOrThrow<string>(
 					'S3_SECRET_ACCESS_KEY'
 				)
-			}
+			},
+			forcePathStyle: true,
+			apiVersion: "latest"
 		})
 
 		this.bucket = this.configService.getOrThrow<string>('S3_BUCKET_NAME')
@@ -39,7 +41,7 @@ export class StorageService {
 		try {
 			await this.client.send(new PutObjectCommand(command))
 		} catch (error) {
-			throw error
+			throw new Error(`${key}: ${error.message}`);
 		}
 	}
 

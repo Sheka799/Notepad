@@ -85,27 +85,32 @@ export class UserService {
 		if (user.avatar) {
 			await this.storageService.remove(user.avatar)
 		}
-
+		
 		let buffer: Buffer
 
 		if (file.buffer) {
 			buffer = file.buffer
 		} else if (file.path) {
-			buffer = fs.readFileSync(file.path)
-			fs.unlinkSync(file.path)
+			buffer = await fs.readFileSync(file.path)
+			await fs.unlinkSync(file.path)
 		} else {
 			throw new BadRequestException('Файл не имеет буфера или пути')
 		}
 
 		const processedBuffer = await sharp(buffer)
-			.resize(512, 512)
-			.webp()
+			.resize(512, 512, {
+				fit: 'cover',
+				withoutEnlargement: true
+			})
+			.webp({ 
+				quality: 80,
+				effort: 4
+			})
 			.toBuffer()
 
 		const fileName = `avatars/${user.id}-${Date.now()}.webp`
-
+		
 		await this.storageService.upload(processedBuffer, fileName, 'image/webp')
-
 		await this.prismaService.user.update({
 			where: {
 				id: user.id
