@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Блокнот',
-  description: 'Приложения для создания блокнотов'
+  title: 'Notepad - Приложение для создания и управления заметками',
+  description: 'Полнофункциональное веб-приложение для создания, редактирования и управления заметками. С поддержкой расширенного текстового редактора, облачного хранилища и JWT аутентификацией'
 }
 
 export default function HomePage() {
@@ -45,7 +45,7 @@ export default function HomePage() {
               Блокнот
             </h1>
             <p className="mt-8 text-lg font-medium text-pretty text-gray-500 sm:text-xl/8">
-              это простое и&nbsp;удобное приложение для работы с&nbsp;текстовыми файлами. Он позволяет создавать, редактировать и&nbsp;сохранять заметки, код или другие текстовые данные без сложного форматирования
+              Создавайте и&nbsp;управляйте заметками с&nbsp;расширенным текстовым редактором. Безопасная облачная синхронизация, интуитивный интерфейс и&nbsp;полный контроль над вашим контентом. Все ваши идеи защищены и&nbsp;синхронизируются на всех устройствах.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Link href="/auth" className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Начать</Link>
