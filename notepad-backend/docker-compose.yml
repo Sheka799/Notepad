@@ -22,7 +22,9 @@ services:
       retries: 5
 
   app:
-    build: .
+    build:
+      context: .
+      target: build
     container_name: notepad-backend
     ports:
       - "3001:3001"

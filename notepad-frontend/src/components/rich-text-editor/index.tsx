@@ -21,6 +21,7 @@ export default function RichTextEditor({
   const isEditable = editable ?? true;
   
   const editor = useEditor({
+    immediatelyRender: false,
     editable: isEditable,
     extensions: [
       StarterKit.configure({

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotAcceptableException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
 import { AuthDto } from './dto/auth.dto';
@@ -76,15 +76,15 @@ export class AuthService {
     return {accessToken, refreshToken}
   }
 
-  private async validateUser(dto:AuthDto) {
+  private async validateUser(dto: AuthDto) {
     const user = await this.userService.getByEmail(dto.email)
 
-    if (!user) throw new NotAcceptableException('Неверный email или пароль')
+    if (!user) throw new UnauthorizedException('Неверный email или пароль')
 
     const isValid = await verify(user.password, dto.password)
 
-    if(!isValid) throw new UnauthorizedException('Неверный email или пароль')
-    
+    if (!isValid) throw new UnauthorizedException('Неверный email или пароль')
+
     return user
   }
 
