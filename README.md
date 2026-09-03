@@ -5,11 +5,13 @@
 ## 🎯 Основные функции
 
 - ✍️ **Создание и редактирование заметок** - редактор на базе Tiptap
-- 👤 **Управление профилем** - Регистрация, авторизация, загрузка аватара
-- 💾 **Облачное хранилище** - Интеграция с AWS S3 для хранения файлов
-- 🔐 **JWT аутентификация** - Безопасное управление сессиями
-- 📱 **Адаптивный дизайн** - Работает на десктопе и мобильных устройствах
-- ⚙️ **Управление настройками** - Персонализация профиля и приложения
+- 👤 **Управление профилем** - регистрация, вход, загрузка аватара
+- 💾 **Облачное хранилище** - интеграция с S3 для хранения файлов
+- 🔐 **JWT аутентификация** - access-токен в памяти вкладки (не в cookie), refresh-токен в httpOnly cookie
+- 📱 **Адаптивный дизайн** - работает на десктопе и мобильных устройствах
+- ⚙️ **Управление настройками** - персонализация профиля и приложения
+- 📄 **Политика обработки персональных данных** - страница `/privacy-policy` + согласие при регистрации
+- 🛡️ **Rate limiting** - ограничение попыток входа/регистрации, security-заголовки (helmet)
 
 ## 🏗️ Архитектура проекта
 
@@ -18,18 +20,20 @@
 ```
 notepad/
 ├── notepad-backend/    # NestJS API сервер
-└── notepad-frontend/   # Next.js фронтенд приложение
+├── notepad-frontend/   # Next.js фронтенд приложение
+└── docker-compose.yml  # Продакшн-стек (db + backend + frontend) для Dokploy
 ```
 
 ## 🔧 Технологический стек
 
 ### Backend (NestJS)
 - **Framework**: NestJS 11
-- **БД**: PostgreSQL с Prisma ORM
-- **Аутентификация**: JWT (Passport.js)
-- **Хранилище**: AWS S3
-- **Валидация**: class-validator, class-transformer
-- **Другое**: Argon2 для хеширования паролей, Sharp для обработки изображений
+- **БД**: PostgreSQL с Prisma ORM (миграции в `prisma/migrations`)
+- **Аутентификация**: JWT (Passport.js), rate limiting через `@nestjs/throttler`
+- **Хранилище**: S3-совместимое (в проде — reg.ru)
+- **Валидация**: class-validator, class-transformer (глобальный `ValidationPipe` с `whitelist`)
+- **Безопасность**: helmet, Argon2 для хеширования паролей
+- **Другое**: Sharp для обработки изображений
 
 ### Frontend (Next.js)
 - **Framework**: Next.js 15
@@ -40,42 +44,66 @@ notepad/
 - **Редактор**: Tiptap (Rich Text Editor)
 - **UI компоненты**: Headless UI, Radix UI
 - **HTTP клиент**: Axios
+- **Аналитика**: Яндекс.Метрика
 
 ## 📋 Требования
 
-- Node.js 18+
+- Node.js 22+
 - Docker & Docker Compose
-- PostgreSQL 15 (или использовать Docker)
-- AWS S3 аккаунт (для загрузки файлов)
+- S3-совместимое хранилище (для загрузки аватаров)
+
+## 🚀 Быстрый старт
+
+В проекте два разных `docker-compose.yml` для разных целей.
+
+### Локальная разработка (hot-reload)
+
+БД + бэкенд поднимаются в dev-режиме, фронтенд — отдельно через `npm run dev`:
+
+```bash
+cd notepad-backend
+docker compose up -d          # поднимет Postgres + NestJS (nest start --watch)
+docker exec notepad-backend npx prisma migrate deploy   # только при первом запуске / новой схеме
+
+cd ../notepad-frontend
+npm install
+npm run dev                   # http://localhost:3000
+```
+
+Переменные окружения — см. `notepad-backend/.env` и `notepad-frontend/.env.local` (не коммитятся, создаются локально).
 
 ## 📚 Структура проекта
 
 ### Backend структура
 
 ```
-notepad-backend/src/
-├── auth/                 # Аутентификация и авторизация
-│   ├── auth.controller.ts
-│   ├── auth.service.ts
-│   ├── jwt.strategy.ts
-│   ├── decorators/       # Custom декораторы
-│   ├── guards/           # JWT гварды
-│   └── dto/              # Data Transfer Objects
-├── user/                 # Управление профилем
-│   ├── user.controller.ts
-│   ├── user.service.ts
-│   └── dto/
-├── notepad/              # CRUD операции для заметок
-│   ├── notepad.controller.ts
-│   ├── notepad.service.ts
-│   └── dto/
-├── storage/              # Работа с AWS S3
-│   ├── storage.service.ts
-│   └── storage.module.ts
-├── config/               # Конфигурация приложения
-├── utils/                # Утилиты
-├── app.module.ts         # Главный модуль
-└── main.ts               # Entry point
+notepad-backend/
+├── prisma/
+│   ├── schema.prisma
+│   └── migrations/       # история миграций (prisma migrate)
+├── src/
+│   ├── auth/                 # Аутентификация и авторизация
+│   │   ├── auth.controller.ts
+│   │   ├── auth.service.ts
+│   │   ├── jwt.strategy.ts
+│   │   ├── decorators/       # Custom декораторы (@Auth, @CurrentUser)
+│   │   ├── guards/           # JWT гварды
+│   │   └── dto/              # Data Transfer Objects
+│   ├── user/                 # Управление профилем и аватаром
+│   │   ├── user.controller.ts
+│   │   ├── user.service.ts
+│   │   └── dto/
+│   ├── notepad/              # CRUD операции для заметок
+│   │   ├── notepad.controller.ts
+│   │   ├── notepad.service.ts
+│   │   └── dto/
+│   ├── storage/               # Работа с S3
+│   │   ├── storage.service.ts
+│   │   └── storage.module.ts
+│   ├── config/                # Конфигурация (jwt.config.ts и т.п.)
+│   ├── utils/                 # Утилиты
+│   ├── app.module.ts          # Главный модуль (Throttler, ConfigModule)
+│   └── main.ts                # Entry point (helmet, ValidationPipe, CORS)
 ```
 
 ### Frontend структура
@@ -83,61 +111,72 @@ notepad-backend/src/
 ```
 notepad-frontend/src/
 ├── app/
-│   ├── layout.tsx        # Главный layout
-│   ├── page.tsx          # Домашняя страница
-│   └── (admin)/          # Защищенные routes
-│       ├── create/       # Создание заметки
-│       ├── edit/         # Редактирование заметки
-│       ├── notepads/     # Список заметок
-│       └── settings/     # Настройки профиля
-├── components/           # Переиспользуемые компоненты
-│   ├── rich-text-editor/ # Tiptap редактор
-│   ├── admin-layout/     # Макет для защищенной части
-│   └── ui/               # UI компоненты
-├── hooks/                # Custom React хуки
-├── services/             # API сервисы
-├── types/                # TypeScript типы
-├── config/               # Конфигурация
-├── constants/            # Константы
-└── lib/                  # Утилиты
+│   ├── layout.tsx          # Главный layout
+│   ├── page.tsx            # Домашняя страница
+│   ├── privacy-policy/     # Политика обработки персональных данных
+│   ├── auth/               # Вход
+│   │   └── register/       # Регистрация (с согласием на обработку ПДн)
+│   └── (admin)/            # Защищённые routes (см. middleware.ts)
+│       ├── create/         # Создание заметки
+│       ├── edit/[id]/      # Редактирование заметки
+│       ├── notepad/[id]/   # Просмотр одной заметки
+│       ├── notepads/       # Список заметок
+│       └── settings/       # Настройки профиля
+├── components/              # Переиспользуемые компоненты
+│   ├── rich-text-editor/   # Tiptap редактор
+│   ├── admin-layout/       # Макет для защищённой части
+│   ├── YandexMetrika.tsx   # Аналитика
+│   └── ui/                 # UI компоненты
+├── hooks/                   # Custom React хуки (мутации, запросы)
+├── services/                # API сервисы (axios)
+├── types/                   # TypeScript типы
+├── config/                  # Конфигурация
+├── constants/                # Константы
+├── middleware.ts             # Гейт защищённых страниц по refresh-cookie
+└── lib/                      # Утилиты
 ```
 
 ## 🔌 API Endpoints
 
-### Аутентификация
-- `POST /api/auth/register` - Регистрация пользователя
-- `POST /api/auth/login` - Вход в систему
-- `POST /api/auth/logout` - Выход из системы
+Базовый префикс: `/api`. Защищённые роуты требуют `Authorization: Bearer <accessToken>`.
 
-### Пользователь
-- `GET /api/user/profile` - Получить профиль (защищено)
-- `PATCH /api/user/update` - Обновить профиль (защищено)
-- `POST /api/user/avatar` - Загрузить аватар (защищено)
-- `DELETE /api/user/avatar` - Удалить аватар (защищено)
+### Аутентификация (`/api/auth`)
+- `POST /auth/register` — регистрация (лимит 5 попыток/мин с IP)
+- `POST /auth/login` — вход (лимит 5 попыток/мин с IP)
+- `POST /auth/login/access-token` — обновить access-токен по refresh-cookie
+- `POST /auth/logout` — выход
 
-### Заметки
-- `GET /api/notepad` - Получить все заметки (защищено)
-- `GET /api/notepad/:id` - Получить заметку по ID (защищено)
-- `POST /api/notepad` - Создать заметку (защищено)
-- `PATCH /api/notepad/:id` - Обновить заметку (защищено)
-- `DELETE /api/notepad/:id` - Удалить заметку (защищено)
+### Пользователь (`/api/user`, защищено)
+- `GET /user` — профиль (включая список заметок)
+- `PUT /user` — обновить email/имя/пароль
+- `POST /user` — загрузить аватар (`multipart/form-data`, поле `avatar`, до 15 МБ, jpg/png/webp)
+- `PUT /user/delete` — удалить аватар
+
+### Заметки (`/api/user/notepads`, защищено)
+- `GET /user/notepads` — список своих заметок
+- `GET /user/notepads/:id` — одна заметка
+- `POST /user/notepads` — создать
+- `PUT /user/notepads/:id` — обновить
+- `DELETE /user/notepads/:id` — удалить
 
 ## 🗄️ База данных
 
-### Модели данных
+### Модели данных (Prisma)
 
 **User**
-- id (уникальный идентификатор)
+- id (cuid)
 - email (уникальный)
 - name
-- password (хеширован с Argon2)
-- avatar (путь к аватару)
-- avatarUrl (URL в S3)
+- password (хеш Argon2)
+- avatar (ключ файла в S3)
+- avatarUrl (публичный URL)
 - createdAt, updatedAt
 
 **Notepad**
-- id (уникальный идентификатор)
+- id (cuid)
+- name
+- description (HTML от Tiptap)
 - userId (связь с User)
-- title
-- content (HTML от Tiptap)
 - createdAt, updatedAt
+
+Изменения схемы вносятся через `npx prisma migrate dev --name <описание>` (не `db push`) — миграции коммитятся в `prisma/migrations` и применяются в проде командой `prisma migrate deploy` (уже встроена в CMD продакшн-образа бэкенда).
