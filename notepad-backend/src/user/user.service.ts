@@ -100,11 +100,11 @@ export class UserService {
 		const processedBuffer = await sharp(buffer)
 			.resize(512, 512, {
 				fit: 'cover',
-				withoutEnlargement: true
+				withoutEnlargement: true // Не увеличивать маленькие изображения
 			})
-			.webp({ 
-				quality: 80,
-				effort: 4
+			.webp({
+				quality: 80, // Уменьшаем качество для меньшего размера
+				effort: 4 // Оптимизация скорости/качества (1-6)
 			})
 			.toBuffer()
 

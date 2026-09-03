@@ -41,8 +41,8 @@ export function Edit({id}: IId) {
         }                
     }, [content])
 
-    const onSubmit: SubmitHandler<INotepadResponse> = data => {
-        updateNotepad({id, data})
+    const onSubmit: SubmitHandler<INotepadResponse> = async data => {
+        await updateNotepad({id, data});
         push(`/notepad/${id}`)
     }
 

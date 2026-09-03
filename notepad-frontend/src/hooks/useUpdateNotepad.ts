@@ -6,7 +6,7 @@ import { toast } from "sonner"
 export function useUpdateNotepad() {
     const queryClient = useQueryClient()
 
-    const {mutate: updateNotepad, isPending} = useMutation({
+    const {mutateAsync: updateNotepad, isPending} = useMutation({
         mutationKey: ['update notepad'],
         mutationFn: ({id, data}: {id: string, data: INotepadResponse}) => notepadService.updateNotepad(id, data),
         onSuccess() {

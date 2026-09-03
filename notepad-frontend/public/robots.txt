@@ -1,0 +1,23 @@
+User-agent: *
+Allow: /$
+Allow: /api/og/*       # Разрешить OG-изображения
+Disallow: /api/        # Запретить API-роуты (кроме og)
+Disallow: /_next/      # Запретить системные файлы Next
+Disallow: /*?          # Запретить параметры
+Disallow: /admin/      # Запретить админку
+Disallow: /private/    # Запретить приватные разделы
+
+Sitemap: https://notepad.web-evgeny.ru/sitemap.xml
+
+User-agent: Yandex
+Allow: /$
+Allow: /api/og/*
+Disallow: /api/
+Disallow: /_next/
+Disallow: /*?
+Disallow: /admin/
+Disallow: /private/
+
+Clean-Param: utm_source&utm_medium&utm_campaign&utm_content&utm_term
+
+Host: https://notepad.web-evgeny.ru

@@ -1,0 +1,76 @@
+# Продакшн-стек для деплоя в Dokploy: БД + бэкенд + фронтенд одним проектом.
+# Локальная разработка с hot-reload — отдельный notepad-backend/docker-compose.yml.
+#
+# Все переменные ниже задаются в Dokploy: Project -> Environment.
+# ВАЖНО: SERVER_URL должен быть ПУБЛИЧНЫМ адресом бэкенда (например,
+# https://api.notepad.example.com), а не "http://backend:3001" — Next.js
+# встраивает его в JS-бандл, который выполняется в браузере пользователя,
+# а не внутри докер-сети. Поэтому бэкенду нужен отдельный публичный домен.
+services:
+  db:
+    image: postgres:15
+    container_name: notepad-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - notepad
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./notepad-backend
+    container_name: notepad-backend
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?schema=public
+      - JWT_SECRET=${JWT_SECRET}
+      - COOKIE_DOMAIN=${COOKIE_DOMAIN}
+      - FRONTEND_URL=${FRONTEND_URL}
+      - S3_URL=${S3_URL}
+      - S3_ENDPOINT=${S3_ENDPOINT}
+      - S3_REGION=${S3_REGION}
+      - S3_ACCESS_KEY_ID=${S3_ACCESS_KEY_ID}
+      - S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY}
+      - S3_BUCKET_NAME=${S3_BUCKET_NAME}
+    # Публикация на хост нужна только для локальной проверки этого файла.
+    # В Dokploy домен для сервиса назначается через его внутренний Traefik
+    # по имени сервиса и порту — эту секцию можно убрать, если Dokploy
+    # ругнётся на занятый порт с другим вашим приложением на том же сервере.
+    ports:
+      - "3001:3001"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - notepad
+
+  frontend:
+    build:
+      context: ./notepad-frontend
+      args:
+        SERVER_URL: ${SERVER_URL}
+        DOMAIN: ${DOMAIN}
+    container_name: notepad-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - notepad
+
+volumes:
+  postgres_data:
+
+networks:
+  notepad:

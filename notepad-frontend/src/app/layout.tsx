@@ -4,6 +4,7 @@ import "./globals.scss";
 import { SITE_NAME } from "@/constants/seo.constants";
 import { Toaster } from "sonner";
 import { Providers } from "./providers";
+import { YandexMetrika } from "@/components/YandexMetrika";
 
 const zen = Roboto({
 	subsets: ['cyrillic', 'latin'],
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
 		default: SITE_NAME,
 		template: `%s | ${SITE_NAME}`
 	},
-	description: 'Простое и удобное приложение для работы с текстовыми файлами. Он позволяет создавать, редактировать и сохранять заметки, код или другие текстовые данные без сложного форматирования',
+	description: 'Полнофункциональное веб-приложение для создания, редактирования и управления заметками. С поддержкой расширенного текстового редактора, облачного хранилища и JWT аутентификацией',
 	icons: {
 		icon: [
 		{ url: '/favicon/favicon.ico', sizes: 'any' },
@@ -44,13 +45,14 @@ export default function RootLayout({
         className={zen.className}
       >
         <Providers>
-					{children}
-					<Toaster
-						theme='dark'
-						position='bottom-right'
-						duration={1500}
-					/>
-				</Providers>
+			{children}
+			<Toaster
+				theme='dark'
+				position='bottom-right'
+				duration={1500}
+			/>
+			<YandexMetrika />
+		</Providers>
       </body>
     </html>
   );
