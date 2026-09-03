@@ -11,21 +11,25 @@ import { AxiosError } from "axios"
 import { Loader as LoaderIcon } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 
-export function Auth() {
+export function Register() {
     const {register, handleSubmit, reset, formState: {errors}} = useForm<IAuthForm>({
         mode: 'onChange'
     })
+
+    const [consent, setConsent] = useState(false)
+    const [consentError, setConsentError] = useState(false)
 
     const {push} = useRouter()
 
     const {mutate, isPending} = useMutation({
         mutationKey: ['auth'],
-        mutationFn: (data: IAuthForm) => authService.main('login', data),
+        mutationFn: (data: IAuthForm) => authService.main('register', data),
         onSuccess() {
-            toast.success('Успешный вход в систему!')
+            toast.success('Успешная регистрация!')
             reset()
             push(DASHBOARD_PAGES.NOTEPADS)
         },
@@ -39,13 +43,19 @@ export function Auth() {
     })
 
     const onSubmit: SubmitHandler<IAuthForm> = data => {
+        if (!consent) {
+            setConsentError(true)
+            return
+        }
+
+        setConsentError(false)
         mutate(data)
     }
 
     return (
         <div className="flex min-h-screen">
             <form className="w-full max-w-screen-sm m-auto shadow rounded-xl p-layout p-4" onSubmit={handleSubmit(onSubmit)}>
-                <Heading title="Вход" />
+                <Heading title="Регистрация" />
 
                 {errors.email?.message && <span className="text-xs text-red-600">{errors.email?.message}</span>}
                 <Field
@@ -79,16 +89,39 @@ export function Auth() {
                     type="password"
                 />
 
+                <label className="flex items-start gap-2 mb-4 text-sm text-gray-600 cursor-pointer">
+                    <input
+                        type="checkbox"
+                        checked={consent}
+                        onChange={e => {
+                            setConsent(e.target.checked)
+                            if (e.target.checked) setConsentError(false)
+                        }}
+                        className="mt-0.5"
+                    />
+                    <span>
+                        Согласен с{' '}
+                        <Link href="/privacy-policy" target="_blank" className="text-indigo-600 hover:text-indigo-500 underline">
+                            политикой обработки персональных данных
+                        </Link>
+                    </span>
+                </label>
+                {consentError && (
+                    <span className="text-xs text-red-600 block mb-4">
+                        Нужно согласие на обработку персональных данных для регистрации
+                    </span>
+                )}
+
                 <div className="flex gap-4 justify-center">
-                    <Button disabled={isPending}>
-                        {isPending ? <LoaderIcon className="animate-spin h-5 w-5" /> : 'Войти'}
+                    <Button disabled={isPending} className="flex justify-center w-[230px]">
+                        {isPending ? <LoaderIcon className="animate-spin h-5 w-5" /> : 'Зарегистрироваться'}
                     </Button>
                 </div>
 
                 <p className="mt-4 text-sm text-center text-gray-600">
-                    Нет аккаунта?{' '}
-                    <Link href="/auth/register" className="text-indigo-600 hover:text-indigo-500 underline">
-                        Зарегистрироваться
+                    Уже есть аккаунт?{' '}
+                    <Link href="/auth" className="text-indigo-600 hover:text-indigo-500 underline">
+                        Войти
                     </Link>
                 </p>
             </form>

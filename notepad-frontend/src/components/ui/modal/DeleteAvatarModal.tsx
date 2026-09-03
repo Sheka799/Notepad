@@ -2,6 +2,7 @@
 
 import { useDeleteAvatar } from '@/hooks/useDeleteAvatar'
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
+import cn from 'clsx'
 
 interface IModal {
     open: boolean
@@ -9,7 +10,7 @@ interface IModal {
 }
 
 export function DeleteAvatarModal({open, setOpen}: IModal) {
-    const {deleteAvatar} = useDeleteAvatar()  
+    const {deleteAvatar, isPendingDeleteAvatar} = useDeleteAvatar()
     
     return (
         <Dialog open={open} onClose={setOpen} className="relative z-10">
@@ -27,15 +28,23 @@ export function DeleteAvatarModal({open, setOpen}: IModal) {
                         <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                             <button
                             type="button"
-                            onClick={() => { setOpen(false); deleteAvatar()}}
-                            className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 sm:ml-3 sm:w-auto">
+                            disabled={isPendingDeleteAvatar}
+                            onClick={() => deleteAvatar(undefined, {onSuccess: () => setOpen(false)})}
+                            className={cn(
+                                "inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold text-white shadow-xs sm:ml-3 sm:w-auto",
+                                isPendingDeleteAvatar ? "cursor-not-allowed bg-gray-400" : "bg-red-600 hover:bg-red-500"
+                            )}>
                             Удалить
                             </button>
                             <button
                             type="button"
                             data-autofocus
+                            disabled={isPendingDeleteAvatar}
                             onClick={() => setOpen(false)}
-                            className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50 sm:mt-0 sm:w-auto">
+                            className={cn(
+                                "mt-3 inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold shadow-xs ring-1 ring-gray-300 ring-inset sm:mt-0 sm:w-auto",
+                                isPendingDeleteAvatar ? "cursor-not-allowed bg-gray-100 text-gray-400" : "bg-white text-gray-900 hover:bg-gray-50"
+                            )}>
                             Отмена
                             </button>
                         </div>

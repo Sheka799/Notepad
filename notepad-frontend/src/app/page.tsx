@@ -48,11 +48,17 @@ export default function HomePage() {
               Создавайте и&nbsp;управляйте заметками с&nbsp;расширенным текстовым редактором. Безопасная облачная синхронизация, интуитивный интерфейс и&nbsp;полный контроль над вашим контентом. Все ваши идеи защищены и&nbsp;синхронизируются на всех устройствах.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
-              <Link href="/auth" className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Начать</Link>
+              <Link href="/auth/register" className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Начать</Link>
             </div>
           </div>
         </div>
       </div>
+
+      <footer className="px-6 lg:px-8 pb-8 text-center">
+        <Link href="/privacy-policy" className="text-sm text-gray-500 hover:text-gray-700 underline">
+          Политика обработки персональных данных
+        </Link>
+      </footer>
     </div>
   )
 }

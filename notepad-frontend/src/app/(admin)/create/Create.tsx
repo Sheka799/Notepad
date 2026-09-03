@@ -14,7 +14,7 @@ export function Create() {
 
     const {push} = useRouter()
 
-    const {createNotepad} = useCreateNotepad()
+    const {createNotepad, isPending} = useCreateNotepad()
 
     const {register, handleSubmit, reset, setValue} = useForm<TypeNotepadFormState>({
         mode: 'onSubmit',
@@ -51,7 +51,7 @@ export function Create() {
                 <input type="hidden" {...register('description')} />
 
                 <div className="flex gap-4 justify-center">
-                    <Button>Создать</Button>
+                    <Button disabled={isPending}>Создать</Button>
                 </div>
             </form>
         </div>
