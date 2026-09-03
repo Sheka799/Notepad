@@ -32,6 +32,21 @@ export class UserService {
 		})
 	}
 
+	async getAuthUser(id: string) {
+		return this.prismaService.user.findUnique({
+			where: {
+				id
+			},
+			select: {
+				id: true,
+				email: true,
+				name: true,
+				avatar: true,
+				avatarUrl: true
+			}
+		})
+	}
+
 	async getByEmail(email: string) {
 		return this.prismaService.user.findUnique({
 			where: {

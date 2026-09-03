@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
+import helmet from 'helmet';
 import { AppModule } from './app.module';
 import * as cookiePasrser from 'cookie-parser'
 
@@ -7,10 +8,11 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.setGlobalPrefix('api')
+  app.use(helmet())
   app.use(cookiePasrser())
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true, // выкидывает из тела запроса поля, не описанные в DTO
+      whitelist: true,
       forbidNonWhitelisted: true
     })
   )
