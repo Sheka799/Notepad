@@ -27,12 +27,12 @@ export function Notepads() {
                 <div className="mx-auto grid grid-cols-1 gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none md:grid-cols-3 lg:grid-cols-5">
                     {data?.map((notepad: INotepadResponse) => 
                         <div key={notepad.id} className="flex items-start justify-between gap-4 border p-3 rounded-md">
-                            <article key={notepad.id} className="flex max-w-xl flex-col items-start justify-between">
+                            <article key={notepad.id} className="flex min-w-0 max-w-xl flex-col items-start justify-between">
                                 <div className="flex items-center gap-x-4 text-xs">
                                     <time dateTime={notepad.createdAt} className="">{dayjs(`${notepad.createdAt}`).format('DD.MM.YYYY')}</time>
                                 </div>
-                                <div className="group relative mb-3">
-                                    <h3 className="mt-3 text-lg/6 font-semibold">{notepad.name}</h3>
+                                <div className="group relative mb-3 w-full min-w-0">
+                                    <h3 className="mt-3 text-lg/6 font-semibold break-words">{notepad.name}</h3>
                                 </div>
                                 <div className="flex gap-4">
                                     <Link href={`/notepad/${notepad.id}`}><Eye size={25} className="opacity-40 hover:opacity-100 transition-opacity duration-300" /></Link>
