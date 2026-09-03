@@ -3,7 +3,6 @@
 import RichTextEditor from "@/components/rich-text-editor"
 import { Button } from "@/components/ui/buttons/Button"
 import { Field } from "@/components/ui/fields/Field"
-import { DASHBOARD_PAGES } from "@/config/pages-url.config"
 import { useCreateNotepad } from "@/hooks/useCreateNotepad"
 import { TypeNotepadFormState } from "@/types/notepad.types"
 import { useRouter } from "next/navigation"
@@ -25,10 +24,9 @@ export function Create() {
         setValue("description", content)
     },[content])
 
-    const onSubmit: SubmitHandler<TypeNotepadFormState> = (data) => {
-        createNotepad(data)
-        reset()
-        push(DASHBOARD_PAGES.NOTEPADS)
+    const onSubmit: SubmitHandler<TypeNotepadFormState> = async (data) => {
+        const notepad = await createNotepad(data)
+        push(`/notepad/${notepad.id}`)
     }
 
     return (

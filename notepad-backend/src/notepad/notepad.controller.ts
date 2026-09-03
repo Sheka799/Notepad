@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, HttpCode, ValidationPipe, UsePipes, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, HttpCode, Put } from '@nestjs/common';
 import { NotepadService } from './notepad.service';
 import { NotepadDto } from './dto/notepad.dto';
 import { Auth } from 'src/auth/decorators/auth.decorator';
@@ -20,7 +20,6 @@ export class NotepadController {
     return this.notepadService.findOne(id, userId);
   }
 
-  @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Post()
   @Auth()
@@ -28,7 +27,6 @@ export class NotepadController {
     return this.notepadService.create(dto, userId);
   }
 
-  @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Put(':id')
   @Auth()
@@ -39,7 +37,7 @@ export class NotepadController {
   @HttpCode(200)
   @Delete(':id')
   @Auth()
-  async delete(@Param('id') id: string) {
-    return this.notepadService.delete(id);
+  async delete(@CurrentUser('id') userId: string, @Param('id') id: string) {
+    return this.notepadService.delete(id, userId);
   }
 }

@@ -6,7 +6,7 @@ import { toast } from "sonner"
 export function useCreateNotepad() {
     const queryClient = useQueryClient()
 
-    const {mutate: createNotepad} = useMutation({
+    const {mutateAsync: createNotepad} = useMutation({
         mutationKey: ['create notepad'],
         mutationFn: (data: TypeNotepadFormState) => notepadService.createNotepad(data),
         onSuccess() {

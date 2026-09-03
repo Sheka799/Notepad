@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
+import { Prisma } from '@prisma/client'
 import { NotepadDto } from './dto/notepad.dto'
 import { PrismaService } from 'src/prisma.servive'
 
@@ -46,11 +47,19 @@ export class NotepadService {
 		})
 	}
 
-	async delete(notepadId: string) {
-		return this.prismaService.notepad.delete({
-			where: {
-				id: notepadId
+	async delete(notepadId: string, userId: string) {
+		try {
+			return await this.prismaService.notepad.delete({
+				where: {
+					id: notepadId,
+					userId
+				}
+			})
+		} catch (error) {
+			if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+				throw new NotFoundException('Блокнот не найден')
 			}
-		})
+			throw error
+		}
 	}
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, FileTypeValidator, Get, HttpCode, MaxFileSizeValidator, ParseFilePipe, Post, Put, UploadedFile, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, FileTypeValidator, Get, HttpCode, MaxFileSizeValidator, ParseFilePipe, Post, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { CurrentUser } from 'src/auth/decorators/user.decorator';
@@ -15,7 +15,6 @@ export class UserController {
     return this.userService.getProfile(id)
   }
 
-  @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Put()
   @Auth()
@@ -33,8 +32,8 @@ export class UserController {
         fileType: /\/(jpg|jpeg|png|webp)$/
       }),
       new MaxFileSizeValidator({
-        maxSize: 1000 * 1000 * 5,
-        message: 'Можно загружать файлы не более 5 МБ'
+        maxSize: 1000 * 1000 * 15,
+        message: 'Можно загружать фото не более 15 МБ'
       })
     ]
   })) file: Express.Multer.File) {
