@@ -139,6 +139,18 @@ export class UserService {
 		return true
 	}
 
+	async deleteAccount(user: User) {
+		if (user.avatar) {
+			await this.storageService.remove(user.avatar)
+		}
+
+		await this.prismaService.user.delete({
+			where: {
+				id: user.id
+			}
+		})
+	}
+
 	async deleteAvatar(user: User) {
 		if (!user.avatar) {
 			return

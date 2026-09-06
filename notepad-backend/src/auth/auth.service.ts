@@ -101,6 +101,18 @@ export class AuthService {
     })
   }
 
+  async deleteAccount(userId: string, password: string) {
+    const user = await this.userService.getById(userId)
+
+    if (!user) throw new UnauthorizedException('Пользователь не найден')
+
+    const isValid = await verify(user.password, password)
+
+    if (!isValid) throw new UnauthorizedException('Неверный пароль')
+
+    await this.userService.deleteAccount(user)
+  }
+
   removeRefreshTokenFromResponse(res: Response) {
     res.cookie(this.REFRESH_TOKEN_NAME, '', {
       httpOnly: true,

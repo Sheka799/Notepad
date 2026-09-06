@@ -1,8 +1,11 @@
-import { Body, Controller, HttpCode, Post, Req, Res, UnauthorizedException } from '@nestjs/common';
+import { Body, Controller, Delete, HttpCode, Post, Req, Res, UnauthorizedException } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
+import { DeleteAccountDto } from './dto/delete-account.dto';
 import { Request, Response } from 'express';
+import { Auth } from './decorators/auth.decorator';
+import { CurrentUser } from './decorators/user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -51,6 +54,20 @@ export class AuthController {
   @HttpCode(200)
   @Post('logout')
   async logout(@Res({passthrough: true}) res: Response) {
+    this.authService.removeRefreshTokenFromResponse(res)
+
+    return true
+  }
+
+  @HttpCode(200)
+  @Delete('account')
+  @Auth()
+  async deleteAccount(
+    @CurrentUser('id') id: string,
+    @Body() dto: DeleteAccountDto,
+    @Res({passthrough: true}) res: Response
+  ) {
+    await this.authService.deleteAccount(id, dto.password)
     this.authService.removeRefreshTokenFromResponse(res)
 
     return true

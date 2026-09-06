@@ -32,7 +32,7 @@ model Notepad {
   name        String
   description String?
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @map("user_id")
 
   @@map("notepad")
