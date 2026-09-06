@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-white dark:bg-gray-900 min-h-screen">
       <header className="absolute inset-x-0 top-0 z-50">
         <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
           <div className="flex lg:flex-1">
@@ -21,7 +21,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="flex flex-1 justify-end">
-            <Link href="/auth" className="text-sm/6 font-semibold text-gray-900">Войти <span aria-hidden="true">&rarr;</span></Link>
+            <Link href="/auth" className="text-sm/6 font-semibold text-gray-900 dark:text-white">Войти <span aria-hidden="true">&rarr;</span></Link>
           </div>
         </nav>
       </header>
@@ -41,10 +41,10 @@ export default function HomePage() {
         </div>
         <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
           <div className="text-center">
-            <h1 className="text-5xl font-semibold tracking-tight text-balance text-gray-900 sm:text-7xl">
+            <h1 className="text-5xl font-semibold tracking-tight text-balance text-gray-900 dark:text-white sm:text-7xl">
               Блокнот
             </h1>
-            <p className="mt-8 text-lg font-medium text-pretty text-gray-500 sm:text-xl/8">
+            <p className="mt-8 text-lg font-medium text-pretty text-gray-500 dark:text-gray-400 sm:text-xl/8">
               Создавайте и&nbsp;управляйте заметками с&nbsp;расширенным текстовым редактором. Безопасная облачная синхронизация, интуитивный интерфейс и&nbsp;полный контроль над вашим контентом. Все ваши идеи защищены и&nbsp;синхронизируются на всех устройствах.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
@@ -55,7 +55,7 @@ export default function HomePage() {
       </div>
 
       <footer className="px-6 lg:px-8 pb-8 text-center">
-        <Link href="/privacy-policy" className="text-sm text-gray-500 hover:text-gray-700 underline">
+        <Link href="/privacy-policy" className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 underline">
           Политика обработки персональных данных
         </Link>
       </footer>

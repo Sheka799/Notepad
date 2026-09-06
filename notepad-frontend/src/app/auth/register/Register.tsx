@@ -13,6 +13,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
+import { useSubmitGuard } from "@/hooks/useSubmitGuard"
 import { toast } from "sonner"
 
 export function Register() {
@@ -25,7 +26,7 @@ export function Register() {
 
     const {push} = useRouter()
 
-    const {mutate, isPending} = useMutation({
+    const {mutateAsync, isPending} = useMutation({
         mutationKey: ['auth'],
         mutationFn: (data: IAuthForm) => authService.main('register', data),
         onSuccess() {
@@ -42,6 +43,10 @@ export function Register() {
         }
     })
 
+    const submitRegistration = useSubmitGuard(async (data: IAuthForm) => {
+        await mutateAsync(data)
+    })
+
     const onSubmit: SubmitHandler<IAuthForm> = data => {
         if (!consent) {
             setConsentError(true)
@@ -49,7 +54,7 @@ export function Register() {
         }
 
         setConsentError(false)
-        mutate(data)
+        submitRegistration(data)
     }
 
     return (
@@ -71,6 +76,7 @@ export function Register() {
                     placeholder="Введите email"
                     extra="mb-4"
                     type="email"
+                    autoComplete="email"
                 />
 
                 {errors.password?.message && <span className="text-xs text-red-600">{errors.password?.message}</span>}
@@ -87,6 +93,7 @@ export function Register() {
                     placeholder="Введите пароль"
                     extra="mb-6"
                     type="password"
+                    autoComplete="new-password"
                 />
 
                 <label className="flex items-start gap-2 mb-4 text-sm text-gray-600 cursor-pointer">

@@ -10,6 +10,7 @@ import RichTextEditor from "@/components/rich-text-editor"
 import { useEffect, useState } from "react"
 import Loader from "@/components/ui/Loader"
 import { useUpdateNotepad } from "@/hooks/useUpdateNotepad"
+import { useSubmitGuard } from "@/hooks/useSubmitGuard"
 
 interface IId {
     id: string
@@ -41,10 +42,10 @@ export function Edit({id}: IId) {
         }                
     }, [content])
 
-    const onSubmit: SubmitHandler<INotepadResponse> = async data => {
-        await updateNotepad({id, data});
+    const onSubmit: SubmitHandler<INotepadResponse> = useSubmitGuard(async data => {
+        await updateNotepad({id, data})
         push(`/notepad/${id}`)
-    }
+    })
 
     return (
         <div className="p-4">

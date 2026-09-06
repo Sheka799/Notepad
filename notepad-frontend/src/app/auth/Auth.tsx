@@ -12,6 +12,7 @@ import { Loader as LoaderIcon } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { SubmitHandler, useForm } from "react-hook-form"
+import { useSubmitGuard } from "@/hooks/useSubmitGuard"
 import { toast } from "sonner"
 
 export function Auth() {
@@ -21,7 +22,7 @@ export function Auth() {
 
     const {push} = useRouter()
 
-    const {mutate, isPending} = useMutation({
+    const {mutateAsync, isPending} = useMutation({
         mutationKey: ['auth'],
         mutationFn: (data: IAuthForm) => authService.main('login', data),
         onSuccess() {
@@ -38,9 +39,9 @@ export function Auth() {
         }
     })
 
-    const onSubmit: SubmitHandler<IAuthForm> = data => {
-        mutate(data)
-    }
+    const onSubmit: SubmitHandler<IAuthForm> = useSubmitGuard(async data => {
+        await mutateAsync(data)
+    })
 
     return (
         <div className="flex min-h-screen">
@@ -61,6 +62,7 @@ export function Auth() {
                     placeholder="Введите email"
                     extra="mb-4"
                     type="email"
+                    autoComplete="email"
                 />
 
                 {errors.password?.message && <span className="text-xs text-red-600">{errors.password?.message}</span>}
@@ -77,6 +79,7 @@ export function Auth() {
                     placeholder="Введите пароль"
                     extra="mb-6"
                     type="password"
+                    autoComplete="current-password"
                 />
 
                 <div className="flex gap-4 justify-center">

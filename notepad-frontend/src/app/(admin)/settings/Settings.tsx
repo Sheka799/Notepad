@@ -8,11 +8,15 @@ import { Button } from "@/components/ui/buttons/Button"
 import { useUpdateSettings } from "@/hooks/useUpdateSettings"
 import { useUpdateAvatar } from "@/hooks/useUpdateAvatar"
 import { ChangeEvent, useState } from "react"
+import { useSubmitGuard } from "@/hooks/useSubmitGuard"
 import { useProfile } from "@/hooks/useProfile"
 import Loader from "@/components/ui/Loader"
 import { Trash } from "lucide-react"
 import { toast } from "sonner"
 import { DeleteAvatarModal } from "@/components/ui/modal/DeleteAvatarModal"
+import { Toggle } from "@/components/ui/toggle"
+import { useTheme } from "@/hooks/useTheme"
+import { Moon, Sun } from "lucide-react"
 
 export function Settings() {
 	const [open, setOpen] = useState<boolean>(false)
@@ -26,19 +30,20 @@ export function Settings() {
 
     const {isPending, mutate} = useUpdateSettings()
 
-    const onSubmit: SubmitHandler<TypeUserForm> = data => {
+    const onSubmit: SubmitHandler<TypeUserForm> = useSubmitGuard(async data => {
         const {password, ...rest} = data
 
-        mutate({
+        await mutate({
             ...rest,
             password: password || undefined
         })
-    }
+    }, {resetOnSuccess: true})
 
-	// Функции по изображению профиля
 	const {data, isLoading} = useProfile()
 
 	const {uploadAvatar, isPendingAvatar} = useUpdateAvatar()
+	
+	const {theme, toggleTheme} = useTheme()
 
     const onSubmitAvatar = (event: ChangeEvent<HTMLInputElement>) => {
         const selectedFile = event.target.files
@@ -91,6 +96,16 @@ export function Settings() {
 								)}
 							</div>
 						</form>
+						<div className="w-full max-w-md mb-6 flex items-center justify-between">
+							<span className="text-sm/6 font-medium text-gray-900 dark:text-white">Тёмная тема</span>
+							<Toggle
+								pressed={theme === 'dark'}
+								onPressedChange={toggleTheme}
+								aria-label="Переключить тему оформления"
+							>
+								{theme === 'dark' ? <Moon size={18} /> : <Sun size={18} />}
+							</Toggle>
+						</div>
 						<form
 							className='w-full max-w-md'
 							onSubmit={handleSubmit(onSubmit)}
@@ -102,6 +117,7 @@ export function Settings() {
 										label='Email: '
 										placeholder='Введите email: '
 										type='email'
+										autoComplete='email'
 										{...register('email', {
 											required: 'Email is required!'
 										})}
@@ -112,6 +128,7 @@ export function Settings() {
 										id='name'
 										label='Имя: '
 										placeholder='Введите имя: '
+										autoComplete='name'
 										{...register('name')}
 										extra='mb-4'
 									/>
@@ -121,6 +138,7 @@ export function Settings() {
 										label='Пароль: '
 										placeholder='Введите пароль: '
 										type='password'
+										autoComplete='new-password'
 										{...register('password')}
 										extra='mb-10'
 									/>

@@ -4,6 +4,7 @@ import RichTextEditor from "@/components/rich-text-editor"
 import { Button } from "@/components/ui/buttons/Button"
 import { Field } from "@/components/ui/fields/Field"
 import { useCreateNotepad } from "@/hooks/useCreateNotepad"
+import { useSubmitGuard } from "@/hooks/useSubmitGuard"
 import { TypeNotepadFormState } from "@/types/notepad.types"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -24,10 +25,10 @@ export function Create() {
         setValue("description", content)
     },[content])
 
-    const onSubmit: SubmitHandler<TypeNotepadFormState> = async (data) => {
+    const onSubmit: SubmitHandler<TypeNotepadFormState> = useSubmitGuard(async (data) => {
         const notepad = await createNotepad(data)
         push(`/notepad/${notepad.id}`)
-    }
+    })
 
     return (
         <div className="p-4">

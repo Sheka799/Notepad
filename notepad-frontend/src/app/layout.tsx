@@ -5,6 +5,7 @@ import { SITE_NAME } from "@/constants/seo.constants";
 import { Toaster } from "sonner";
 import { Providers } from "./providers";
 import { YandexMetrika } from "@/components/YandexMetrika";
+import { CookieConsent } from "@/components/CookieConsent";
 
 const zen = Roboto({
 	subsets: ['cyrillic', 'latin'],
@@ -40,7 +41,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('theme');
+                  if (!theme) {
+                    theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                  }
+                  document.documentElement.classList.add(theme);
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body
         className={zen.className}
       >
@@ -49,9 +67,10 @@ export default function RootLayout({
 			<Toaster
 				theme='dark'
 				position='bottom-right'
-				duration={1500}
+				duration={3000}
 			/>
 			<YandexMetrika />
+			<CookieConsent />
 		</Providers>
       </body>
     </html>

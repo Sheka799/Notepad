@@ -10,6 +10,7 @@ interface InputFieldProps {
 	disabled?: boolean
 	type?: string
 	isNumber?: boolean
+	autoComplete?: string
 }
 
 export const Field = forwardRef<HTMLInputElement, InputFieldProps>(

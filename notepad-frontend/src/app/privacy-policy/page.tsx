@@ -8,25 +8,25 @@ export const metadata: Metadata = {
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-white dark:bg-gray-900 min-h-screen">
       <header className="px-6 lg:px-8 py-6">
         <nav className="flex items-center justify-between">
           <Link href="/" className="-m-1.5 p-1.5">
             <img alt="logo" src="/logo.png" className="h-10 w-auto" />
           </Link>
-          <Link href="/auth" className="text-sm/6 font-semibold text-gray-900">Войти <span aria-hidden="true">&rarr;</span></Link>
+          <Link href="/auth" className="text-sm/6 font-semibold text-gray-900 dark:text-white">Войти <span aria-hidden="true">&rarr;</span></Link>
         </nav>
       </header>
 
       <div className="mx-auto max-w-3xl px-6 lg:px-8 pb-24">
-        <h1 className="text-3xl font-semibold tracking-tight text-gray-900 sm:text-4xl mt-6 mb-2">
+        <h1 className="text-3xl font-semibold tracking-tight text-gray-900 dark:text-white sm:text-4xl mt-6 mb-2">
           Политика обработки персональных данных
         </h1>
-        <p className="text-sm text-gray-500 mb-10">Действует с 03.09.2026</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-10">Действует с 03.09.2026</p>
 
-        <div className="space-y-8 text-gray-700 text-base/7">
+        <div className="space-y-8 text-gray-700 dark:text-gray-300 text-base/7">
           <section>
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">1. Общие положения</h2>
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">1. Общие положения</h2>
             <p>
               Настоящая Политика определяет порядок обработки персональных данных пользователей
               веб-сервиса Notepad (далее — «Сервис»), расположенного по адресу https://notepad.web-evgeny.ru,
@@ -39,7 +39,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">2. Какие данные мы собираем</h2>
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">2. Какие данные мы собираем</h2>
             <p>При использовании Сервиса мы обрабатываем следующие данные:</p>
             <ul className="list-disc pl-6 mt-2 space-y-1">
               <li>email, указанный при регистрации;</li>
@@ -52,9 +52,9 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">3. Cookie и аналитика</h2>
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">3. Cookie и аналитика</h2>
             <p>
-              Сервис использует файл cookie <code className="text-sm bg-gray-100 px-1 py-0.5 rounded">refreshToken</code> —
+              Сервис использует файл cookie <code className="text-sm bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded">refreshToken</code> —
               технически необходимый для работы авторизации, недоступен для чтения скриптами
               страницы (флаг HttpOnly).
             </p>
@@ -75,7 +75,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">4. Цели обработки</h2>
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">4. Цели обработки</h2>
             <ul className="list-disc pl-6 space-y-1">
               <li>регистрация и авторизация в Сервисе;</li>
               <li>предоставление функционала Сервиса (создание, хранение и редактирование заметок);</li>
@@ -86,7 +86,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">5. Хранение и защита данных</h2>
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">5. Хранение и защита данных</h2>
             <p>
               Данные хранятся на серверах, расположенных на территории Российской Федерации.
               Аватары пользователей хранятся в объектном хранилище S3-совместимого провайдера.
@@ -96,7 +96,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">6. Передача третьим лицам</h2>
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">6. Передача третьим лицам</h2>
             <p>
               Мы не продаём и не передаём ваши персональные данные третьим лицам, за исключением:
             </p>
@@ -108,7 +108,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">7. Ваши права</h2>
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">7. Ваши права</h2>
             <p>Вы вправе в любой момент:</p>
             <ul className="list-disc pl-6 mt-2 space-y-1">
               <li>запросить информацию о том, какие ваши данные обрабатываются;</li>
@@ -122,7 +122,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">8. Изменения политики</h2>
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">8. Изменения политики</h2>
             <p>
               Мы можем обновлять эту Политику. Актуальная версия всегда доступна по этому адресу.
               Дата вступления в силу указана в начале документа.
