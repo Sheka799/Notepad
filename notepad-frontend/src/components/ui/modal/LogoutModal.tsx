@@ -3,7 +3,7 @@
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import cn from 'clsx'
 import { authService } from "@/services/auth.service"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 
 interface IModal {
@@ -13,10 +13,14 @@ interface IModal {
 
 export function LogoutModal({open, setOpen}: IModal) {
     const {push} = useRouter()
+    const queryClient = useQueryClient()
     const {mutate, isPending} = useMutation({
         mutationKey: ['logout'],
         mutationFn: () => authService.logout(),
-        onSuccess: () => push('/')
+        onSuccess: () => {
+            queryClient.clear()
+            push('/')
+        }
     })
     
     return (

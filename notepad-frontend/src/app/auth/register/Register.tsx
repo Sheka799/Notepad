@@ -6,7 +6,7 @@ import { Heading } from "@/components/ui/Heading"
 import { DASHBOARD_PAGES } from "@/config/pages-url.config"
 import { authService } from "@/services/auth.service"
 import { IAuthForm } from "@/types/auth.types"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { AxiosError } from "axios"
 import { Loader as LoaderIcon } from "lucide-react"
 import Link from "next/link"
@@ -25,11 +25,13 @@ export function Register() {
     const [consentError, setConsentError] = useState(false)
 
     const {push} = useRouter()
+    const queryClient = useQueryClient()
 
     const {mutateAsync, isPending} = useMutation({
         mutationKey: ['auth'],
         mutationFn: (data: IAuthForm) => authService.main('register', data),
         onSuccess() {
+            queryClient.clear()
             toast.success('Успешная регистрация!')
             reset()
             push(DASHBOARD_PAGES.NOTEPADS)
